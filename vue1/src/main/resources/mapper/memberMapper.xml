@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vue1.Controller.memberMapper">  
+    <select id="searchMember" parameterType="MemberSearchDto" resultType="MemberDto">
+    	<![CDATA[
+    	SELECT *
+    	From member
+        WHERE 1 = 1
+        ]]>
+        <if test="id != null and id != ''">
+	    	<![CDATA[
+	    	AND id = #{id}
+	    	]]>
+	    </if> 
+	    <if test="name != null and name != ''">
+	    	<![CDATA[
+	    	AND name = #{name}
+	    	]]>
+	    </if>
+	    <if test="gender != null and gender != ''">
+            <![CDATA[
+            AND gender = #{gender}
+            ]]>
+        </if>
+        <if test="country != null and country != ''">
+            <![CDATA[
+            AND country = #{country}
+            ]]>
+        </if>
+        <if test="city != null and city != ''">
+            <![CDATA[
+            AND city = #{city}
+            ]]>
+        </if>
+        <if test="beforeDate != null and beforeDate != '' and afterDate != null and afterDate != ''">
+            <![CDATA[
+            AND join_date between #{beforeDate} and #{afterDate}
+            ]]>
+        </if>
+        ORDER BY join_date DESC
+    </select>
+    
+    <select id="searchId" parameterType="String" resultType="String">
+    	SELECT id
+        FROM Member
+        WHERE id = #{id}
+    </select>
+    
+    <select id="selectAllCountMember" parameterType="MemberSearchDto" resultType="String">
+    	<![CDATA[
+    	SELECT count(*)
+        FROM member
+        where 1 = 1
+        ]]>
+        <if test="id != null and id != ''">
+	    	<![CDATA[
+	    	AND id = #{id}
+	    	]]>
+	    </if> 
+	    <if test="name != null and name != ''">
+	    	<![CDATA[
+	    	AND name = #{name}
+	    	]]>
+	    </if>
+	    <if test="gender != null and gender != ''">
+            <![CDATA[
+            AND gender = #{gender}
+            ]]>
+        </if>
+        <if test="country != null and country != ''">
+            <![CDATA[
+            AND country = #{country}
+            ]]>
+        </if>
+        <if test="city != null and city != ''">
+            <![CDATA[
+            AND city = #{city}
+            ]]>
+        </if>
+    </select>
+    
+    <select id="selectGenderMember" parameterType="String" resultType="MemberDto">
+    	SELECT *
+        FROM Member
+        WHERE 1 = 1
+        <if test="gender != null and gender != ''">
+            <![CDATA[
+            AND gender = #{gender}
+            ]]>
+        </if>
+        ORDER BY join_date DESC
+    </select>
+    
+    <select id="searchUpdateMember" parameterType="String" resultType="MemberNumDto">
+    	SELECT *
+        FROM Member
+        WHERE id = #{id}
+    </select>
+    
+    <insert id="insertMember" parameterType="MemberDto">
+    	INSERT INTO Member
+    	VALUES
+    	(seq.nextval, #{id}, #{name}, #{gender}, #{country}, #{city}, sysdate)
+    </insert>
+    
+    <update id="updateMember" parameterType="MemberDto">
+    	UPDATE member
+    	SET id = #{id}, name = #{name}, gender = #{gender}, country = #{country}, city = #{city}
+    	WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteMember" parameterType="List">
+		DELETE 
+		FROM Member
+		WHERE id in
+		<foreach collection="list" item="item" index="i" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+     
+    
+</mapper>
